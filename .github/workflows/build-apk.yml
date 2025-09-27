@@ -6,6 +6,7 @@ on:
     paths:
       - 'pubspec.yaml'
       - 'lib/**.dart'
+      - 'assets/**'
 
 jobs:
   build:
@@ -19,12 +20,19 @@ jobs:
         with:
           channel: stable
 
-      # WICHTIG: Android-/iOS-/Web-Ordner erzeugen (mind. Android)
+      # Falls android/-Projekt noch nicht im Repo ist:
       - name: Create Android project (if missing)
         run: flutter create . --platforms=android -t app
 
       - name: Pub get
         run: flutter pub get
+
+      # NEU: Launcher-Icons & Splash aus assets erzeugen
+      - name: Generate launcher icons
+        run: flutter pub run flutter_launcher_icons
+
+      - name: Generate native splash
+        run: flutter pub run flutter_native_splash:create
 
       - name: Build debug APK
         run: flutter build apk --debug
