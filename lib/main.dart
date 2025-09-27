@@ -172,11 +172,28 @@ class AppState extends ChangeNotifier {
     users['staff1'] = User(id: 'staff1', name: 'Mitarbeiter', role: Role.staff, pin: '0000', perms: defaultPermissionsForRole(Role.staff));
 
     // Seed Produkte/Lager
-    upsertProduct(Product(id: 'beer', name: 'Bier 0,5', priceCents: 500, color: Colors.amber, area: "Schankwagen", category: "Bier"));
-    upsertProduct(Product(id: 'cola', name: 'Cola 0,5', priceCents: 400, color: Colors.brown, area: "Bar", category: "Softdrinks"));
-    upsertProduct(Product(id: 'vodkaBull', name: 'Vodka Bull', priceCents: 900, color: Colors.red, area: "Bar", category: "Longdrinks"));
-    upsertProduct(Product(id: 'water', name: 'Wasser', priceCents: 300, color: Colors.blue, area: "Bar", category: "Softdrinks"));
-
+    upsertProduct(Product(id: 'beer', name: 'Hell 0,4', priceCents: 500, color: Colors.amber, area: "Schankwagen", category: "Bier"));
+    upsertProduct(Product(id: 'beer', name: 'Radler 0,4', priceCents: 500, color: Colors.amber, area: "Schankwagen", category: "Bier"));
+    upsertProduct(Product(id: 'wasser', name: 'Wasser medium 0,5', priceCents: 500, color: Colors.amber, area: "Schankwagen", category: "Softdrinks"));
+    upsertProduct(Product(id: 'redbull', name: 'Red Bull 0,25', priceCents: 500, color: Colors.amber, area: "Schankwagen", category: "Softdrinks"));
+    upsertProduct(Product(id: 'colamix', name: 'Cola Mix 0,5', priceCents: 400, color: Colors.brown, area: "Schankwagen", category: "Softdrinks"));
+    
+    upsertProduct(Product(id: 'vodkaosaft', name: 'Vodka O-Saft', priceCents: 700, color: Colors.red, area: "Bar", category: "Longdrinks"));
+    upsertProduct(Product(id: 'eisteekorn', name: 'Eistee Korn', priceCents: 700, color: Colors.red, area: "Bar", category: "Longdrinks"));
+    upsertProduct(Product(id: 'barcadicola', name: 'Barcadi Cola', priceCents: 700, color: Colors.red, area: "Bar", category: "Longdrinks"));
+    upsertProduct(Product(id: 'havanacola', name: 'Havana Cola', priceCents: 700, color: Colors.red, area: "Bar", category: "Longdrinks"));
+    upsertProduct(Product(id: 'malibumara', name: 'Malibu Maracuja', priceCents: 700, color: Colors.red, area: "Bar", category: "Longdrinks"));
+    upsertProduct(Product(id: 'maliosaft', name: 'Malibu O-Saft', priceCents: 700, color: Colors.red, area: "Bar", category: "Longdrinks"));
+    upsertProduct(Product(id: 'wasser', name: 'Wasser medium 0,5', priceCents: 500, color: Colors.amber, area: "Bar", category: "Softdrinks"));
+    upsertProduct(Product(id: 'beer', name: 'Hell 0,4', priceCents: 500, color: Colors.amber, area: "Bar", category: "Bier"));
+    upsertProduct(Product(id: 'beer', name: 'Radler 0,4', priceCents: 500, color: Colors.amber, area: "Bar", category: "Bier"));
+    upsertProduct(Product(id: 'colamix', name: 'Cola Mix 0,5', priceCents: 400, color: Colors.brown, area: "Bar", category: "Softdrinks"));
+    upsertProduct(Product(id: 'redbull', name: 'Red Bull 0,25', priceCents: 400, color: Colors.amber, area: "Bar", category: "Softdrinks"));
+    upsertProduct(Product(id: 'wodka', name: 'Wodka Shot', priceCents: 300, color: Colors.red, area: "Bar", category: "Shots"));    
+    upsertProduct(Product(id: 'pfeffi', name: 'Pfeffi Shot', priceCents: 300, color: Colors.red, area: "Bar", category: "Shots"));    
+    upsertProduct(Product(id: 'jäger', name: 'Jäger Shot', priceCents: 300, color: Colors.red, area: "Bar", category: "Shots"));    
+    upsertProduct(Product(id: 'ficken', name: 'Ficken Shot', priceCents: 300, color: Colors.red, area: "Bar", category: "Shots"));        
+    
     inventory.addAll({'beer': 200, 'cola': 120, 'vodkaBull': 80, 'water': 150});
     packSize.addAll({'beer': 24, 'cola': 24, 'vodkaBull': 6, 'water': 12});
 
