@@ -19,13 +19,17 @@ jobs:
         with:
           channel: stable
 
-      - name: Flutter pub get
+      # WICHTIG: Android-/iOS-/Web-Ordner erzeugen (mind. Android)
+      - name: Create Android project (if missing)
+        run: flutter create . --platforms=android -t app
+
+      - name: Pub get
         run: flutter pub get
 
       - name: Build debug APK
         run: flutter build apk --debug
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
