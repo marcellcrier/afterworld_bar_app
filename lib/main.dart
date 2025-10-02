@@ -33,7 +33,8 @@ class AfterWorldBarApp extends StatelessWidget {
 }
 
 enum Role { admin, chef1, chef2, staff }
-String roleLabel(Role r) => switch (r) {
+enum DepositKind { none, becher, glas, boot }
+string roleLabel(Role r) => switch (r) {
   Role.admin => "VA / Admin",
   Role.chef1 => "Chef-Bar 1",
   Role.chef2 => "Chef-Bar 2",
