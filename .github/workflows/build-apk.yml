@@ -37,6 +37,10 @@ jobs:
             flutter create --platforms=android .
           fi
 
+- name: Remove default test (created by flutter create)
+  run: rm -f test/widget_test.dart
+
+
       - name: List workspace (debug)
         run: |
           ls -la
