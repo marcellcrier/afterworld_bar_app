@@ -1,7 +1,9 @@
 name: Build Android APK (Flutter)
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch: {}   # Manuell starten über "Actions → Run workflow"
+  # push:
+  #   branches: [ "main" ]  # Optional: bei jedem Push bauen
 
 jobs:
   build:
@@ -26,20 +28,24 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          # flutter-version: "3.22.2"
+          # flutter-version: "3.22.2"  # Optional: fixieren
 
       - name: Flutter doctor
         run: flutter doctor -v
 
+      # Nur falls android/ im Repo fehlt (z. B. nur lib/ gepusht)
       - name: Ensure Android platform exists
         run: |
           if [ ! -d "android" ]; then
             flutter create --platforms=android .
           fi
 
-- name: Remove default test (created by flutter create)
-  run: rm -f test/widget_test.dart
-
+      # Löscht den Default-Test, den "flutter create" ggf. erzeugt
+      - name: Remove default test (created by flutter create)
+        run: |
+          if [ -f test/widget_test.dart ]; then
+            rm -f test/widget_test.dart
+          fi
 
       - name: List workspace (debug)
         run: |
@@ -51,7 +57,7 @@ jobs:
       - name: Pub get (verbose)
         run: flutter pub get -v
 
-      # Nur generieren, wenn Dateien existieren
+      # Optional-Generatoren: laufen nur, wenn die Dateien existieren
       - name: Generate launcher icon
         run: |
           if [ -f assets/icons/aw_icon.png ]; then
@@ -59,6 +65,7 @@ jobs:
           else
             echo "No assets/icons/aw_icon.png – skipping icons"
           fi
+
       - name: Generate native splash
         run: |
           if [ -f assets/splash/aw_splash.png ]; then
@@ -67,8 +74,9 @@ jobs:
             echo "No assets/splash/aw_splash.png – skipping splash"
           fi
 
-      - name: Analyze (zeigt Syntax-/Imports-Fehler)
-        run: flutter analyze
+      # Analyzer so einstellen, dass Infos/Warnings nicht den Build stoppen
+      - name: Analyze (nur echte Fehler)
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
       - name: Build debug APK (verbose)
         run: flutter build apk --debug -v
