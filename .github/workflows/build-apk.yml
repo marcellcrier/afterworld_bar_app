@@ -6,7 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,22 +26,28 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          # flutter-version: "3.22.2" # optional fixieren
+          # flutter-version: "3.22.2"
 
       - name: Flutter doctor
         run: flutter doctor -v
 
-      # Falls android/ fehlt (z. B. nur lib/ gepusht)
       - name: Ensure Android platform exists
         run: |
           if [ ! -d "android" ]; then
             flutter create --platforms=android .
           fi
 
-      - name: Pub get
-        run: flutter pub get
+      - name: List workspace (debug)
+        run: |
+          ls -la
+          ls -la assets || true
+          ls -la assets/images || true
+          ls -la assets/splash || true
 
-      # Optional: Icon & Splash generieren (nur wenn Dateien existieren)
+      - name: Pub get (verbose)
+        run: flutter pub get -v
+
+      # Nur generieren, wenn Dateien existieren
       - name: Generate launcher icon
         run: |
           if [ -f assets/icons/aw_icon.png ]; then
@@ -57,6 +62,9 @@ jobs:
           else
             echo "No assets/splash/aw_splash.png – skipping splash"
           fi
+
+      - name: Analyze (zeigt Syntax-/Imports-Fehler)
+        run: flutter analyze
 
       - name: Build debug APK (verbose)
         run: flutter build apk --debug -v
