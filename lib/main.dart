@@ -34,7 +34,12 @@ class AWBrand {
 
 ThemeData _awTheme(AppState app) {
   final seed = AWBrand.colorForArea(app.selectedArea);
-  final scheme = ColorScheme.fromSeed(seedColor: seed, background: AWBrand.bone);
+
+  // Kein 'background' mehr setzen (deprecated) – stattdessen Oberfläche hell machen
+  final baseScheme = ColorScheme.fromSeed(seedColor: seed);
+  final scheme = baseScheme.copyWith(
+    surface: AWBrand.bone, // ersetzt 'background'
+  );
 
   return ThemeData(
     colorScheme: scheme,
@@ -44,11 +49,14 @@ ThemeData _awTheme(AppState app) {
       titleLarge: GoogleFonts.montserrat(fontWeight: FontWeight.w800),
       bodyMedium: GoogleFonts.montserrat(),
     ),
-    cardTheme: const CardTheme(
+
+    // >>> HIER: CardThemeData statt CardTheme
+    cardTheme: const CardThemeData(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
     ),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
