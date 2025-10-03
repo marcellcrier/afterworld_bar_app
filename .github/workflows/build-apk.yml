@@ -3,7 +3,7 @@ name: Build Android APK (Flutter)
 on:
   workflow_dispatch: {}   # Manuell starten über "Actions → Run workflow"
   # push:
-  #   branches: [ "main" ]  # Optional: bei jedem Push bauen
+  #   branches: [ "main" ]
 
 jobs:
   build:
@@ -24,11 +24,15 @@ jobs:
       - name: Accept Android licenses
         run: yes | sdkmanager --licenses
 
+      # 🔧 Installiere gezielt die Platform/Build-Tools für compileSdk 34
+      - name: Install Android platform & build-tools 34
+        run: sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          # flutter-version: "3.22.2"  # Optional: fixieren
+          # flutter-version: "3.22.2"  # optional fixieren
 
       - name: Flutter doctor
         run: flutter doctor -v
@@ -40,7 +44,7 @@ jobs:
             flutter create --platforms=android .
           fi
 
-      # Löscht den Default-Test, den "flutter create" ggf. erzeugt
+      # Löscht den Default-Test, den "flutter create" ggf. anlegt
       - name: Remove default test (created by flutter create)
         run: |
           if [ -f test/widget_test.dart ]; then
@@ -54,6 +58,14 @@ jobs:
           ls -la assets/images || true
           ls -la assets/splash || true
 
+      # ✅ Falls Assets im pubspec.yaml stehen, aber Ordner fehlen: anlegen
+      - name: Ensure asset folders exist
+        run: |
+          mkdir -p assets/images assets/splash
+          [ -f assets/images/.gitkeep ] || touch assets/images/.gitkeep
+          [ -f assets/splash/.gitkeep ] || touch assets/splash/.gitkeep
+
+      # Schritt A: Dependencies upgraden (fix für alte v1-Embedding-Plugins)
       - name: Pub upgrade (fix v1 embedding plugins) + clean
         run: |
           flutter pub upgrade --major-versions
@@ -79,15 +91,25 @@ jobs:
             echo "No assets/splash/aw_splash.png – skipping splash"
           fi
 
-      # Analyzer so einstellen, dass Infos/Warnings nicht den Build stoppen
+      # Analyzer: nur echte Fehler stoppen den Build
       - name: Analyze (nur echte Fehler)
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
+      # Build + Log mitschreiben; bei Fehler Log als Artifact anhängen
       - name: Build debug APK (verbose)
-        run: flutter build apk --debug -v
+        run: |
+          set -o pipefail
+          flutter build apk --debug -v 2>&1 | tee build_log.txt
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: build/app/outputs/flutter-apk/app-debug.apk
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build_log.txt
