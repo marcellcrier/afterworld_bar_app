@@ -54,6 +54,11 @@ jobs:
           ls -la assets/images || true
           ls -la assets/splash || true
 
+      - name: Pub upgrade (fix v1 embedding plugins) + clean
+        run: |
+          flutter pub upgrade --major-versions
+          flutter clean
+
       - name: Pub get (verbose)
         run: flutter pub get -v
 
